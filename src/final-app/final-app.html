@@ -1,0 +1,98 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+<link rel="import" href="./componente-2.html">
+<link rel="import" href="./tabla-total.html">
+
+<dom-module id="final-app">
+  <template>
+    <style>
+      :host{
+        --main-card:{
+          border: 2px solid black;
+          padding:5px;
+          padding-bottom:10px;
+          margin:5px;
+          box-shadow: 10px 10px 23px -6px rgba(89,82,89,0.82);
+        }
+      }
+      :host .container{
+        display: flex;
+        align-items: flex-start;
+        
+      }
+      :host .card{
+        @apply --main-card;
+        background-color:ivory;
+        min-width: 35%;
+        max-width: 35%;
+        
+      }
+    </style>
+    <div class="card">
+        <h1>Tienda</h1>
+        <h2>Cart</h2>
+        <table>
+          <thead>
+            <th>products</th>
+            <th>price</th>
+            <th>units</th>
+            <th>total</th>
+          </thead>
+          <tbody>
+            <template is="dom-repeat" items="[[cart]]">
+              <tr>
+                <td>[[item.nombre]]</td>
+                <td>[[item.cantidad]]</td>
+                <td>[[item.precio]]</td> 
+                <td>[[item.total]]</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+        <tabla-total cantidad=[[cantidad]] total=[[total]]></tabla-total>
+          
+        <div class="container">
+          <componente-2 fruta=&#x1F34D; nombre="pinneaples" editado="[[editado]]" precio="10.5" cantidad=0 cart={{cart}}></componente-2>
+          <componente-2 fruta=&#x1F34A; nombre="oranges" editado="[[editado]]" precio="20.5" cantidad=0 cart={{cart}}></componente-2>
+          <componente-2 fruta=&#x1F352; nombre="berries" editado="[[editado]]" precio="21.5" cantidad=0 cart={{cart}}></componente-2>
+        </div>
+    </div>
+    
+    </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class FinalApp extends Polymer.Element {
+      static get is() { return 'final-app'; }
+      static get observers(){
+        return['calcular(cart.*)']
+      }
+      static get properties(){
+        return{
+          cart:{type:Array,value:[]},
+          editado:{type:Boolean,value:false},
+          cantidad:Number,
+          total:Number
+        }
+      }
+
+      calcular(){
+        this.cantidad=0;
+        this.total=0;
+        for(var i=0;i<this.cart.length;i++){
+          let c='cart.'+i+'.cantidad';
+          let t='cart.'+i+'.total';
+          this.total+=this.get(t);
+          this.cantidad+=this.get(c);
+        }
+      }
+    }
+    
+
+    window.customElements.define(FinalApp.is, FinalApp);
+  </script>
+</dom-module>

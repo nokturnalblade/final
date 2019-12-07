@@ -1,0 +1,30 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="tabla-total">
+  <template>
+    <table>
+      <tbody>
+        <tr><td >&nbsp; &nbsp; &nbsp; -Total &nbsp;&nbsp;</td><td>&nbsp; &nbsp; &nbsp;</td><td>&nbsp;&nbsp; [[cantidad]]&nbsp; &nbsp;</td><td>&nbsp;&nbsp; [[total]] &nbsp;&nbsp;</td></tr>
+      </tbody>
+    </table>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+     class DomTotal extends Polymer.Element{
+				static get is(){return 'tabla-total'}
+
+				static get properties(){
+					return{
+						total:Number,
+						cantidad:Number
+					}
+				}
+			}
+
+    window.customElements.define(DomTotal.is, DomTotal);
+  </script>
+</dom-module>

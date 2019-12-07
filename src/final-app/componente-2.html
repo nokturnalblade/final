@@ -1,0 +1,90 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/shadycss/apply-shim.html">
+
+<dom-module id="componente-2">
+  <template>
+    <style>
+
+      :host{
+        --box-card:{
+          border: 2px solid black;
+          padding:5px;
+          margin:5px;
+          box-shadow: 2px 2px 2px 1px gray
+        }
+        
+      }
+      :host .caja{
+        @apply --box-card;
+      }
+      :host .texto{
+        font-size: 40px;
+        text-align: center;
+      }
+    </style>
+      <div class="caja">
+      <h3>[[nombre]] </h3>
+      <p class="texto">	[[fruta]]</p>
+      <p>Price: [[precio]]</p>
+      <p>Units: [[cantidad]]</p> 
+      <div >
+        <button on-click="agregar">+</button>
+        <button on-click="quitar">-</button> 
+      </div>
+    </div>
+      
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+     class PolymerItem extends Polymer.Element{
+				static get is(){return "componente-2";}
+				static get properties(){
+					return{
+						fruta:String,
+						nombre:String,
+						precio:Number,
+						cantidad:{type:Number, observer:"changeAmount"},
+						cart:{type:Array, notify:true},
+						editado:Boolean
+					}
+				}
+				agregar(){
+					this.cantidad++;
+				}
+				quitar(){
+					this.cantidad--;
+				}
+				changeAmount(cantidad){
+					if(!this.editado&&this.cantidad!=0)
+					{
+						this.push('cart', {nombre:this.nombre,cantidad:this.cantidad, precio:this.precio,total:this.precio*this.cantidad });
+					}
+					
+					if(this.cantidad<0){
+						this.cantidad=0;
+					}
+	
+					for(var i=0;i<this.cart.length;i++){
+						if(this.get('cart.'+i+'.nombre')==this.nombre)
+						{	
+							this.editado=true;
+							if(this.cantidad>0){
+								this.set('cart.'+i+'.cantidad', this.cantidad);
+								this.set('cart.'+i+'.total', this.precio*this.cantidad);
+							}
+							else{
+								this.splice('cart',i,1);
+								this.editado=false;
+							}
+						}
+					}			
+				}
+			}
+
+    window.customElements.define(PolymerItem.is, PolymerItem);
+  </script>
+</dom-module>
